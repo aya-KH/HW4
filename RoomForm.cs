@@ -20,36 +20,16 @@ namespace TeacherAttendanceDB
 
         private void RoomForm_Load(object sender, EventArgs e)
         {
-            dGVRoom.DataSource = ConnectionDB.FetchData("SELECT*FROM teacher_attendance.room");
+            // TODO: This line of code loads data into the 'dataSet1.room' table. You can move, or remove it, as needed.
+            this.roomTableAdapter.Fill(this.dataSet1.room);
         }
 
-        private void dGVRoom_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void roomBindingNavigatorSaveItem_Click(object sender, EventArgs e)
         {
-            id = dGVRoom.Rows[e.RowIndex].Cells["id"].Value.ToString();
-            roomNameTB.Text = dGVRoom.Rows[e.RowIndex].Cells["room_name"].Value.ToString();
-            deleteRoom.Enabled = true;
-            modifyRoom.Enabled = true;
-        }
+            this.Validate();
+            this.roomBindingSource.EndEdit();
+            this.tableAdapterManager.UpdateAll(this.dataSet1);
 
-        private void addRoom_Click(object sender, EventArgs e)
-        {
-            ConnectionDB.Query("INSERT INTO teacher_attendance.room (room_name) VALUES ('" + roomNameTB.Text + "')");
-            dGVRoom.DataSource = ConnectionDB.FetchData("SELECT*FROM teacher_attendance.room");
-            deleteRoom.Enabled = false;
-            modifyRoom.Enabled = false;
-        }
-
-        private void modifyRoom_Click(object sender, EventArgs e)
-        {     
-            ConnectionDB.Query("UPDATE teacher_attendance.room SET room_name='" + roomNameTB.Text + "' WHERE id=" + id);
-            dGVRoom.DataSource = ConnectionDB.FetchData("SELECT*FROM teacher_attendance.room");
-        }
-
-        private void deleteRoom_Click(object sender, EventArgs e)
-        {
-            ConnectionDB.Query("DELETE FROM teacher_attendance.room WHERE id=" + id);
-            dGVRoom.DataSource = ConnectionDB.FetchData("SELECT*FROM teacher_attendance.room");
-            roomNameTB.Clear();
         }
     }
 }

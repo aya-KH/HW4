@@ -21,34 +21,16 @@ namespace TeacherAttendanceDB
 
         private void TeacherForm_Load(object sender, EventArgs e)
         {
-            dGVTeacher.DataSource = ConnectionDB.FetchData("SELECT*FROM teacher_attendance.teacher");
+            // TODO: This line of code loads data into the 'dataSet1.teacher' table. You can move, or remove it, as needed.
+            this.teacherTableAdapter.Fill(this.dataSet1.teacher);
         }
 
-        private void dGVTeacher_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void teacherBindingNavigatorSaveItem_Click(object sender, EventArgs e)
         {
-            id = dGVTeacher.Rows[e.RowIndex].Cells["id"].Value.ToString();
-            teacherNameTB.Text = dGVTeacher.Rows[e.RowIndex].Cells["teacher_name"].Value.ToString();
-            deleteTeacher.Enabled = true;
-            modifyTeacher.Enabled = true;
-        }
+            this.Validate();
+            this.teacherBindingSource.EndEdit();
+            this.tableAdapterManager.UpdateAll(this.dataSet1);
 
-        private void addTeacher_Click(object sender, EventArgs e)
-        {
-            ConnectionDB.Query("INSERT INTO teacher_attendance.teacher (teacher_name) VALUES ('" + teacherNameTB.Text + "')");
-            dGVTeacher.DataSource = ConnectionDB.FetchData("SELECT*FROM teacher_attendance.teacher");
-        }
-
-        private void modifyTeacher_Click(object sender, EventArgs e)
-        {
-            ConnectionDB.Query("UPDATE teacher_attendance.teacher SET teacher_name='" + teacherNameTB.Text + "' WHERE id=" + id);
-            dGVTeacher.DataSource = ConnectionDB.FetchData("SELECT*FROM teacher_attendance.teacher");
-        }
-
-        private void deleteTeacher_Click(object sender, EventArgs e)
-        {
-            ConnectionDB.Query("DELETE FROM teacher_attendance.teacher WHERE id=" + id);
-            dGVTeacher.DataSource = ConnectionDB.FetchData("SELECT*FROM teacher_attendance.teacher");
-            teacherNameTB.Clear();
         }
     }
 }
